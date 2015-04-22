@@ -1,5 +1,26 @@
 #!/bin/bash
 
+#Input max connections
+read -p "Please input max connections. (Default: 1000): " MC
+
+if [[ -z "$MC" ]]
+then
+    MC=1000
+else
+    NUM_REGEX='^[0-9]+$'
+    if ! [[ $MC =~ $NUM_REGEX ]]
+    then
+        echo "Max connections must be integer"
+        exit 1
+    fi
+
+    if [ $MC -le 0 ]
+    then
+        echo "Max connections must greater 0"
+        exit 1
+    fi
+fi
+
 #cURL location and parameters
 CURL="/usr/bin/curl -s -o /dev/null --retry 0 -w %{http_code} -m 30"
 
@@ -55,7 +76,7 @@ do
     THREAD=`/bin/ps aux|grep curl|grep -v grep|wc -l`
 
     #Max curl connections
-    if [ "$THREAD" -lt 2000 ]
+    if [ "$THREAD" -lt $MC ]
     then
         #Random proxy server
         P_R=${P[$RANDOM%TP]}
