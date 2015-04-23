@@ -73,6 +73,25 @@ TP=${#P[@] - 1}
 TH=${#H[@] - 1}
 TT=${#T[@] - 1}
 
+if [ $TP -eq 0 ]
+then
+    TP=
+    echo "You have no any proxies!"
+    sleep 3
+fi
+
+if [ $TH -eq 0 ]
+then
+    echo "Header can not be empty!"
+    exit 1
+fi
+
+if [ $TT -eq 0 ]
+then
+    echo "Target url can not be empty!"
+    exit 1
+fi
+
 #Main attack function
 function attack()
 {
@@ -121,13 +140,18 @@ do
             if ! [[ -z $T_R ]]
             then
 
-                #Random proxy server
-                P_R=${P[$RANDOM%TP]}
-                if [ -z $P_R ]
+                if ! [[ -z $TP ]]
                 then
-                    attackWithoutProxy $T_R "$H_R" $THREAD &
+                    #Random proxy server
+                    P_R=${P[$RANDOM%TP]}
+                    if [ -z $P_R ]
+                    then
+                        attackWithoutProxy $T_R "$H_R" $THREAD &
+                    else
+                        attack $T_R $P_R "$H_R" $THREAD &
+                    fi
                 else
-                    attack $T_R $P_R "$H_R" $THREAD &
+                    attackWithoutProxy $T_R "$H_R" $THREAD &
                 fi
             else
                 echo "Target url is empty, bypass this one test."
