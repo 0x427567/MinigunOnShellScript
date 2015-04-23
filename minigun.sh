@@ -88,6 +88,7 @@ function attack()
     echo -e "Current threads : $THREADS"
 }
 
+#Attack without proxy
 function attackWithoutProxy()
 {
     local URL=$1
@@ -115,13 +116,24 @@ do
 	#Random target url
 	T_R=${T[$RANDOM%TT]}
 
-        #Random proxy server
-        P_R=${P[$RANDOM%TP]}
-        if [ -z $P_R ]
+        if ! [[ -z $H_R ]]
         then
-            attackWithoutProxy $T_R "$H_R" $THREAD &
+            if ! [[ -z $T_R ]]
+            then
+
+                #Random proxy server
+                P_R=${P[$RANDOM%TP]}
+                if [ -z $P_R ]
+                then
+                    attackWithoutProxy $T_R "$H_R" $THREAD &
+                else
+                    attack $T_R $P_R "$H_R" $THREAD &
+                fi
+            else
+                echo "Target url is empty, bypass this one test."
+            fi
         else
-            attack $T_R $P_R "$H_R" $THREAD &
+            echo "Header is empty, bypass this one test."
         fi
     fi
 done
