@@ -11,4 +11,5 @@ All config is one setting per line.
 ## How to use
 
 $ chmod u+x minigun.sh
+
 $ ./minigun.sh
