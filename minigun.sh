@@ -1,5 +1,22 @@
 #!/bin/bash
 
+#cURL location
+CURL=`which curl`
+if [[ -z $CURL ]]
+then
+    echo "Can not found curl path."
+    read -p "Please input curl path: " CURL
+fi
+
+#ps location
+PS=`which ps`
+if [[ -z $PS ]]
+then
+    echo "Can not found ps path."
+    read -p "Please input ps path: " PS
+fi
+
+
 #Input max connections
 read -p "Please input max connections. (Default: 1000): " MC
 
@@ -21,12 +38,8 @@ else
     fi
 fi
 
-#cURL location and parameters
-CURL=`which curl`
+#cURL parameters
 CURL="$CURL -s -o /dev/null --retry 0 -w %{http_code} -m 30"
-
-#PS location
-PS=`which ps`
 
 #Proxy list file
 PROXY_FILE="proxy.cfg"
