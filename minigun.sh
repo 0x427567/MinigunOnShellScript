@@ -99,7 +99,7 @@ function attack()
     local P=$2
     local H=$3
     local THREADS=$4
-    RESULT=`$CURL -H user-agent:"$H" -x $P $URL &`
+    RESULT=`$CURL -H "User-Agent: $H" -H "Cache-Control: no-cache" -H "Pragma: no-cache" -x $P $URL &`
 
     #Print result
     echo -e "$URL"
@@ -113,7 +113,7 @@ function attackWithoutProxy()
     local URL=$1
     local H=$2
     local THREADS=$3
-    RESULT=`$CURL -H user-agent:"$H" $URL &`
+    RESULT=`$CURL -H "user-agent: $H" -H "Cache-Control: no-cache" -H "Pragma: no-cache" $URL &`
 
     echo -e "$URL"
     echo -e "HTTP Status : $RESULT\tProxy : \033[0;31mNo Proxy\033[0m"
