@@ -22,7 +22,11 @@ else
 fi
 
 #cURL location and parameters
-CURL="/usr/bin/curl -s -o /dev/null --retry 0 -w %{http_code} -m 30"
+CURL=`which curl`
+CURL="$CURL -s -o /dev/null --retry 0 -w %{http_code} -m 30"
+
+#PS location
+PS=`which ps`
 
 #Proxy list file
 PROXY_FILE="proxy.cfg"
@@ -73,7 +77,7 @@ while [ 1 ]
 do
 
     #Get current curl connections
-    THREAD=`/bin/ps aux|grep curl|grep -v grep|wc -l`
+    THREAD=`$PS aux|grep curl|grep -v grep|wc -l`
 
     #Max curl connections
     if [ "$THREAD" -lt $MC ]
