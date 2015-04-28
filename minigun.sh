@@ -39,7 +39,7 @@ else
 fi
 
 #cURL parameters
-CURL="$CURL -s -o /dev/null --retry 0 -w %{http_code} -m 1 --keepalive-time 1 --connect-timeout 1"
+CURL="$CURL -L -s -o /dev/null --retry 0 -w %{http_code} -m 1 --keepalive-time 1 --connect-timeout 1"
 
 #Proxy list file
 PROXY_FILE="proxy.cfg"
